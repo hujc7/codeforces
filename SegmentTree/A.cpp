@@ -60,12 +60,14 @@ template<class T> void print(vector<T>& v) {
 
 class SegmentTree {
 public:
+    using pii = pair<int, int>;
     int size;
-    vector<ll> v;
+    vector<pair<int, int>> v;
+    const pair<int, int> INF =  make_pair(INT_MAX, 0);
     SegmentTree(int  n) {
         size = 1;
         while (size < n) size *= 2;
-        v.assign(2*size, 0);
+        v.assign(2*size, make_pair(0, 0));
     }
 
     void build_tree(vector<int>& a) {
@@ -76,38 +78,45 @@ public:
         set(index, val, 0, 0, size);
     }
 
-    ll query(int l, int r) {
+    pii query(int l, int r) {
         return query(l, r, 0, 0, size);
     }
 // private:
     void build_tree(vector<int>& a, int i, int l, int r) {
         if (r - l == 1) {
-            if (l < a.size()) v[i] = a[l];
+            if (l < a.size()) v[i] = make_pair(a[l], 1);
             return;
         }
         int mid = (l + r) / 2;
         build_tree(a, 2*i+1, l, mid);
         build_tree(a, 2*i+2, mid, r);
-        v[i] = v[2*i+1] + v[2*i+2];
+        v[i] = merge(v[2*i+1], v[2*i+2]);
     }
 
     void set(int index, int val, int i, int l, int r) {
         if (r - l == 1) {
-            v[i] = val;
+            v[i] = make_pair(val, 1);
             return;
         }
 
         int mid = (l + r) / 2;
         if (index < mid) set(index, val, 2*i+1, l, mid);
         else set(index, val, 2*i+2, mid, r);
-        v[i] = v[2*i+1] + v[2*i+2];
+        v[i] = merge(v[2*i+1], v[2*i+2]);
     }
 
-    ll query(int left, int right, int i, int l, int r) {
-        if (r <= left || right <= l) return 0;
+    pii query(int left, int right, int i, int l, int r) {
+        if (r <= left || right <= l) return INF;
         if (left <= l && r <= right) return v[i];
         int mid = (l + r) / 2;
-        return query(left, right, 2*i+1, l, mid) + query(left, right, 2*i+2, mid, r);
+        return merge(query(left, right, 2*i+1, l, mid),
+                     query(left, right, 2*i+2, mid, r));
+    }
+
+    pii merge(pii left, pii right) {
+        if (left.first < right.first) return left;
+        else if (left.first > right.first) return right;
+        return make_pair(left.first, left.second + right.second);
     }
 };
 
@@ -120,7 +129,10 @@ void solve() {
     while (m--) {
         int t, c1, c2; cin >> t >> c1 >> c2;
         if (t == 1) st.set(c1, c2);
-        else cout << st.query(c1, c2) << "\n";
+        else {
+            auto tmp = st.query(c1, c2);
+            cout << tmp.first << " " << tmp.second << "\n";
+        }
     }
 }
 
