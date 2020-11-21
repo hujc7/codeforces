@@ -57,31 +57,14 @@ template<class T> void print(vector<T>& v) {
 }
 
 // code
-unordered_map<ll, bool> memo;
-const ll offset = 1e6;
-ll hcode(int x, int y) {
-    return offset*x + y;
-}
-
-bool dfs(int x, int y, int d, int k) {
-    if (x * x + y * y > d * d) return true;
-    if (x > y) swap(x, y);
-    ll id = hcode(x, y);
-
-    auto it = memo.find(id);
-    if (it != memo.end()) return it->second;
-    
-    bool left  = dfs(x + k, y, d, k);
-    bool right = dfs(x, y + k, d, k);
-
-    // print(x, y, !left || !right);
-    return memo[id] = !left || !right;
-}
 
 void solve() {
     ll d, k; cin >> d >> k;
-    memo.clear();
-    cout << (dfs(0, 0, d, k) ? "Ashish" : "Utkarsh") << '\n';
+    ll t = sqrt(d * d / 2);
+    t = t / k * k;
+    if ((t+k) * (t+k) <= d*d) t += k;
+    if (t*t*2 > d*d) t -= k;
+    cout << ((t*t + (t+k)*(t+k) <= d*d) ? "Ashish" : "Utkarsh") << '\n';
 }
 
 int main() {
