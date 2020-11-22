@@ -14,6 +14,7 @@ using namespace std;
 #define rep(i,L,R) for (int i = L; i < R; ++i)
 #define rrep(i,L,R) for (int i = R; i > L; --i)
 #define each(x, a) for (auto& x: a)
+#define nndl "\n"
 
 using ul = unsigned long;
 using ll = long long;
@@ -59,11 +60,28 @@ template<class T> void print(vector<T>& v) {
 // code
 
 void solve() {
-    
+    int n, m; cin >> n >> m;
+
+    vector<int> xors(n + m);
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            int tmp; cin >> tmp;
+            xors[i+j] ^= tmp;
+        }
+    }
+    int flag = 1;
+    for (int i = 0; i < n + m; ++i) {
+        flag &= (xors[i] == 0);
+    }
+
+    if (!flag) cout << "Ashish" << nndl;
+    else cout << "Jeel" << nndl;
 }
 
 int main() {
-    ios_base::sync_with_stdio(false), cin.tie(nullptr);
-    solve();
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    int t; cin >> t;
+    while (t--)
+        solve();
     return 0;
 }
