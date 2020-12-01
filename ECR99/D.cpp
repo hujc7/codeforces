@@ -58,10 +58,34 @@ template<class T> void print(vector<T>& v) {
 }
 
 // code
+const int maxn = 501;
+using T = short;
+
+const T INF = 501;
+T dfs(T index, T last, T x, vi& v, vector<vector<T>>& dp) {
+    if (index == v.size()) return 0;
+    // check for validity
+    if (v[index] < last && x < last) return INF;
+
+    T& val = dp[index][x];
+    if (val != -1) return val;
+
+    T res = INF;
+    if (last <= x && x < v[index]) res = min(res, T(dfs(index+1, x, v[index], v, dp) + 1));
+    if (last <= v[index]) res = min(res, dfs(index+1, v[index], x, v, dp));
+    
+    return val = res;
+}
 
 void solve() {
-    int x, y; cin >> x >> y;
-    cout << x-1 << " " << y << nndl;
+    int n, x; cin >> n >> x;
+    vi v(n);
+    read(v);
+
+    vector<vector<T>> dp(n, vector<T>(501, -1));
+
+    int res = dfs(0, 0, x, v, dp);
+    cout << (res == INF ? -1 : res) << nndl;
 }
 
 int main() {
