@@ -12,13 +12,13 @@ using namespace std;
 #define fi first
 #define se second
 #define rep(i,L,R) for (int i = L; i < R; ++i)
-#define rrep(i,L,R) for (int i = R; i > L; --i)
+#define rrep(i,R,L) for (int i = R; i >= L; --i)
 #define each(x, a) for (auto& x: a)
-#define nndl "\n"
 
 using ul = unsigned long;
 using ll = long long;
 using vi = vector<int>;
+using vll = vector<ll>;
 using vb = vector<bool>;
 using vvi = vector<vi>;
 using ii = pair<int, int>;
@@ -57,24 +57,26 @@ template<class T> void print(vector<T>& v) {
     write("\n");
 }
 
+#define nndl "\n"
 // code
+
+void prep() {
+
+}
 
 void solve() {
     int n; cin >> n;
-    vector<int> v(n);
-    iota(v.begin(), v.end(), 1);
-
-    for (int i = 0; i + 1 < n; i += 2) {
-        swap(v[i], v[i+1]);
+    int pos = 0, step = 0;
+    while (pos < n) {
+        pos += ++step;
     }
 
-    if (n % 2 == 1 && n >= 3) swap(v[n-3], v[n-1]);
-    rep(i, 0, n) cout << v[i] << " ";
-    cout << nndl;
+    cout << (pos - n == 1 ? step +1 : step) << nndl;
 }
 
 int main() {
     ios_base::sync_with_stdio(false), cin.tie(nullptr);
+    prep();
     int t; cin >> t;
     while (t--)
         solve();
